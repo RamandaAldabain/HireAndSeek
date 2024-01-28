@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace HireAndSeek.Entities.Dto
 {
-	public class LoginRequestDto
+	public class SkillDto
 	{
-		public string Email { get; set; }
-		public string Token { get; set; }
+		public int Id { get; set; }
+		public string Name { get; set; }
+
 	}
 }

@@ -1,8 +1,8 @@
-﻿using HireAndSeekEntities.Lookups;
+﻿using HireAndSeek.Entities.Lookups;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HireAndSeekEntities
+namespace HireAndSeek.Entities
 {
 	public class User : BaseEntity
 	{
@@ -10,8 +10,8 @@ namespace HireAndSeekEntities
 		public string FirstName {get; set;}
 		public string LastName {get; set;}
 		public string Password {get; set;}
-		public RolesLookup Role { get; set; }
-		[NotMapped]
-		public IFormFile ProfilePicture { set; get; }
+		public RolesEnum Role { get; set; }
+		public int FileId { get; set; }
+		public FileDetails PictureFile { get; }
 	}
 }

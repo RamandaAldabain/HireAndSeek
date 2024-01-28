@@ -1,5 +1,5 @@
 ﻿using HireAndSeek.Entities;
-using HireAndSeekEntities;
+using HireAndSeek.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,6 @@ namespace HireAndSeek.Service
 {
 	public interface IAccountManager
 	{
-	 public IUser CreateOrUpdateUser(UserDto model);
+	 public Task<User> CreateOrUpdateUser(UserDto model);
 	}
 }

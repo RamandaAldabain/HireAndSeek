@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HireAndSeekEntities
+namespace HireAndSeek.Entities
 {
 	public class CompanyDto
 	{

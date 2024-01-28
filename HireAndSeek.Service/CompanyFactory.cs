@@ -1,7 +1,6 @@
 ﻿using HireAndSeek.Data;
 using HireAndSeek.Entities;
-using HireAndSeekEntities;
-using HireAndSeekEntities.Lookups;
+using HireAndSeek.Entities.Lookups;
 using Mapster;
 using System;
 using System.Collections.Generic;
@@ -14,60 +13,58 @@ namespace HireAndSeek.Service
 {
 	public class CompanyFactory : IUserFactory
 	{
-		private readonly DatabaseContext _db;
+		private readonly DatabaseContext _dbContext;
+		private readonly FileService _fileService;
 
-		//public CompanyFactory()
-		//{
-		//}
 
-		public CompanyFactory(DatabaseContext db)
+		public CompanyFactory(DatabaseContext db, FileService fileService)
 		{
-			
-			_db = db;
+
+			_dbContext = db;
+			_fileService = fileService;
 		}
 
-		public IUser CreateUser(UserDto model)
+		public async Task<User> CreateUser(UserDto model)
 		{
-			if (model.Company == null)
-				throw new ArgumentException("Company informations are required");
-		
 			var user = model.Adapt<User>();
-			user.ProfilePicture= model.ProfilePicture;
+			var pictureFile = await _fileService.UploadFileAsync(model.ProfilePicture);
+			user.FileId = pictureFile.Id;
 
-			_db.Users.Add(user);
-			var company = new Company(model.Company.Address, model.Company.Industry, model.Company.CompanySize, model.Id, user);
-			_db.Companies.Add(company);
-			_db.SaveChanges();
-			return company;
+			await _dbContext.Users.AddAsync(user);
+			await _dbContext.SaveChangesAsync();
 
+			var company = model.Company.Adapt<Company>();
+			company.UserId = user.Id;
+			await _dbContext.Companies.AddAsync(company);
 
+			await _dbContext.SaveChangesAsync();
 
-
+			return user;
 		}
 
-		public IUser UpdateUser(UserDto model)
+		public async Task<User> UpdateUser(UserDto model)
 		{
-			if (model.Company == null)
-				throw new ArgumentException("Company informations are required");
-			var user = _db.Users.Where(i => i.Id == model.Id && i.Role==model.Role).FirstOrDefault();
+
+			var user = _dbContext.Users.Where(i => i.Id == model.Id && i.Role == model.Role).FirstOrDefault();
 			if (user == null)
 				throw new Exception("user not found");
-			user=model.Adapt<User>();
-			user.ProfilePicture = model.ProfilePicture;
+			user = model.Adapt<User>();
+			var pictureFile = await _fileService.UploadFileAsync(model.ProfilePicture);
+			user.FileId = pictureFile.Id;
 
-			_db.Update(user);
-			_db.SaveChanges();
+			_dbContext.Update(user);
+			_dbContext.SaveChangesAsync();
 
-			var company = _db.Companies.Where(i => i.UserId == model.Id).FirstOrDefault();
+			var company = _dbContext.Companies.Where(i => i.UserId == model.Id).FirstOrDefault();
 			if (company == null)
 				throw new Exception("company not found");
 			model.Company.UserId = user.Id;
 			model.Company.Id = company.Id;
 			company = model.Company.Adapt<Company>();
 
-			_db.Companies.Update(company);
-			_db.SaveChanges();
-			return company;
+			_dbContext.Companies.Update(company);
+			_dbContext.SaveChangesAsync();
+			return user;
 		}
 	}
 }

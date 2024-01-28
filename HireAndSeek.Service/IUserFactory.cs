@@ -1,5 +1,4 @@
 ﻿using HireAndSeek.Entities;
-using HireAndSeekEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +9,8 @@ namespace HireAndSeek.Service
 {
 	public interface IUserFactory
 	{
-		IUser CreateUser(UserDto model);
-		IUser UpdateUser(UserDto model);
+	    Task<User> CreateUser(UserDto model);
+		Task<User> UpdateUser(UserDto model);
 
 	}
 }

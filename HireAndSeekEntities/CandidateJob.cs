@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HireAndSeekEntities
+namespace HireAndSeek.Entities
 {
 	public class CandidateJob : BaseEntity
 	{

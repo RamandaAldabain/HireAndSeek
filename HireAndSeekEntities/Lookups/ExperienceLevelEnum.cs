@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HireAndSeekEntities.Lookups
+namespace HireAndSeek.Entities.Lookups
 {
-    public enum RolesLookup
+    public enum ExperienceLevelEnum
     {
-        Company = 1,
-        Candidate = 2,
+        Fresh = 1,
+        Experience = 2
     }
 }

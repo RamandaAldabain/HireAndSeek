@@ -1,30 +1,24 @@
 ﻿using HireAndSeek.Entities;
-using HireAndSeekEntities.Lookups;
+using HireAndSeek.Entities.Lookups;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HireAndSeekEntities
+namespace HireAndSeek.Entities
 {
-	public class Candidate : BaseEntity ,IUser
+	public class Candidate : BaseEntity
 	{
-		public Candidate()
-		{
-		}
+	
 
-		public Candidate(ExperienceLevel? experienceLevel, IFormFile cv  ,int userId, User user)
-		{
-			ExperienceLevel = experienceLevel;
-			UserId = userId;
-			User = user;
-			Cv = cv;
-		}
-
-		public ExperienceLevel? ExperienceLevel { get; set; }
-		[NotMapped]
-		public IFormFile Cv { set; get; }
+		public ExperienceLevelEnum? ExperienceLevel { get; set; }
+	
 		public int UserId { get; set; }
 		public User User { get; }
-		public ICollection<CandidateJob>? Jobs { get; set; }
+		public int FileId { get; set; }
+		public FileDetails CvFile { get; }
+		public ICollection<CandidateJob> Jobs { get; set; }
+		public ICollection<CandidateSkills> Skills { get; set; }
+		public ICollection<Appointment> Appointments { get; set; }
+
 
 	}
 }

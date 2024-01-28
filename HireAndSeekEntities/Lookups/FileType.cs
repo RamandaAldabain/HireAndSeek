@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HireAndSeekEntities.Lookups
+namespace HireAndSeek.Entities.Lookups
 {
-    public enum ExperienceLevel
-    {
-        Fresh = 1,
-        Experience = 2
-    }
+	public enum FileTypeEnum
+	{
+		PDF = 1,
+		DOCX = 2
+	}
 }

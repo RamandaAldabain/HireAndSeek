@@ -4,6 +4,7 @@ using HireAndSeek.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HireAndSeek.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240126210035_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,30 +24,6 @@ namespace HireAndSeek.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("HireAndSeek.Entities.Appointment", b =>
-                {
-                    b.Property<int?>("CandidateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AppointmentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsReserved")
-                        .HasColumnType("bit");
-
-                    b.HasKey("CandidateId", "JobId");
-
-                    b.HasIndex("JobId");
-
-                    b.ToTable("Appointments");
-                });
 
             modelBuilder.Entity("HireAndSeek.Entities.Candidate", b =>
                 {
@@ -394,25 +373,6 @@ namespace HireAndSeek.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("HireAndSeek.Entities.Appointment", b =>
-                {
-                    b.HasOne("HireAndSeek.Entities.Candidate", "Candidate")
-                        .WithMany("Appointments")
-                        .HasForeignKey("CandidateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HireAndSeek.Entities.Job", "Job")
-                        .WithMany("Appointments")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Candidate");
-
-                    b.Navigation("Job");
-                });
-
             modelBuilder.Entity("HireAndSeek.Entities.Candidate", b =>
                 {
                     b.HasOne("HireAndSeek.Entities.FileDetails", "CvFile")
@@ -524,8 +484,6 @@ namespace HireAndSeek.Data.Migrations
 
             modelBuilder.Entity("HireAndSeek.Entities.Candidate", b =>
                 {
-                    b.Navigation("Appointments");
-
                     b.Navigation("Jobs");
 
                     b.Navigation("Skills");
@@ -538,8 +496,6 @@ namespace HireAndSeek.Data.Migrations
 
             modelBuilder.Entity("HireAndSeek.Entities.Job", b =>
                 {
-                    b.Navigation("Appointments");
-
                     b.Navigation("Candidates");
 
                     b.Navigation("Skills");

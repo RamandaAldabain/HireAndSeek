@@ -1,11 +1,11 @@
 ﻿using HireAndSeek.Service;
-using HireAndSeekEntities;
-using HireAndSeekEntities.Dto;
+using HireAndSeek.Entities;
+using HireAndSeek.Entities.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApplication1.Controllers
+namespace HireAndSeek.Api.Controllers
 {
 	[Route("api/[controller]/[action]")]
 	[ApiController]
@@ -18,13 +18,13 @@ namespace WebApplication1.Controllers
 			_JobService = JobService;
 		}
 		[HttpPost]
-		[Authorize]
+		
 
-		public IActionResult CreateOrUpdateJob(JobDto model)
+		public async Task<IActionResult> CreateOrUpdateJob(JobDto model)
 		{
-			if (ModelState.IsValid)
+			if (ModelState.IsValid && model != null)
 			{
-				var job =  _JobService.CreateOrUpdateJob(model);
+				var job = await _JobService.CreateOrUpdateJob(model);
 				return Ok(new { message = "Operation successful", data = job });
 			}
 			else
@@ -35,11 +35,12 @@ namespace WebApplication1.Controllers
 		[HttpPost]
 		[Authorize]
 
-		public IActionResult ApplyToJob(int jobId, int candidateId)
+		public async Task<IActionResult> ApplyToJob(int jobId, int candidateId)
 		{
 			if (ModelState.IsValid)
 			{
-				var candidateJob = _JobService.ApplyToJob(jobId, candidateId);
+				var candidateJob = await _JobService.ApplyToJob(jobId, candidateId);
+
 				return Ok(new { message = "Operation successful", data = candidateJob });
 			}
 			else
@@ -47,6 +48,5 @@ namespace WebApplication1.Controllers
 				return BadRequest(new { error = "Invalid model data" });
 			}
 		}
-
 	}
 }

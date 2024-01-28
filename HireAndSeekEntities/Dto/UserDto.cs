@@ -1,16 +1,18 @@
-﻿using HireAndSeekEntities.Lookups;
+﻿using HireAndSeek.Entities.Dto;
+using HireAndSeek.Data;
+using HireAndSeek.Entities.Lookups;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 
-namespace HireAndSeekEntities
+namespace HireAndSeek.Entities
 {
 	public class UserDto 
 	{
 		public int Id { get; set; }
 		[Required(ErrorMessage = "EmailIsRequired")]
-		[EmailAddress]
+	
 		[RegularExpression(@"^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$", ErrorMessage = "Invalid Email Address")]
 		public string Email {get; set;}
 		[Required(ErrorMessage = "FirstNameIsRequired")]
@@ -27,11 +29,12 @@ namespace HireAndSeekEntities
 		public string ConfirmPassword { get; set; }
 		[Required(ErrorMessage = "RoleIsRequired")]
 
-		public RolesLookup Role { get; set; }
-		[NotMapped]
-		public IFormFile ProfilePicture { set; get; }
+		public RolesEnum Role { get; set; }
 
-		public CompanyDto? Company { get; set; }
-		public CandidateDto? Candidate { get; set; }
+		public IFormFile ProfilePicture { set; get; }
+		[RequiredIf("Role", new Object[] { RolesEnum.Company }, "FIELD_IS_REQUIRED")]
+		public CompanyDto Company { get; set; }
+		[RequiredIf("Role", new Object[] { RolesEnum.Candidate }, "FIELD_IS_REQUIRED")]
+		public CandidateDto Candidate { get; set; }
 	}
 }

@@ -9,7 +9,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 //var key = "Qweras778992**__))(()()(5d";
-var key1 = Encoding.UTF8.GetBytes("Qweras778992**__))(()()(5d")
+var key1 = Encoding.UTF8.GetBytes("Qweras778992**__))(()(iiiiiii8)(5d")
     .Take(32) // Ensure the key is 32 bytes (256 bits)
     .ToArray();
 
@@ -32,12 +32,17 @@ builder.Services.AddAuthentication(x =>
 
 	};
 });
-
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<JobService>();
+builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<SkillsService>();
 builder.Services.AddTransient<JwtAuthenticationManager>(provider =>
 {
 	// Resolve dependencies within the factory method
 	var dbContext = provider.GetRequiredService<DatabaseContext>();
-	var accountManagerService = new AccountManagerService(dbContext);
+	var fileService = provider.GetRequiredService<FileService>();
+	var skillsService = provider.GetRequiredService<SkillsService>();
+	var accountManagerService = new AccountService(dbContext,fileService,skillsService, builder.Configuration);
 
 	return new JwtAuthenticationManager(key, accountManagerService);
 });// Add services to the container.
@@ -55,8 +60,8 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 //builder.Services.AddAuthorization();
 //builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<DatabaseContext>();
 
-builder.Services.AddScoped<AccountManagerService>();
-builder.Services.AddScoped<JobService>();
+
+
 
 ConfigureMapster.Configure();
 var app = builder.Build();
