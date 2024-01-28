@@ -37,7 +37,7 @@ namespace HireAndSeek.Service
 		{
 			var skillIds = new List<int>();
 			IEnumerable<T> entitySkills;
-			int maxSkillsToAdd = _configuration.GetValue<int>("SkillLimitConfig:MaxSkills");
+			int maxSkillsToAdd = _configuration.GetValue<int>("LimitConfig:MaxSkills");
 
 			try
 			{

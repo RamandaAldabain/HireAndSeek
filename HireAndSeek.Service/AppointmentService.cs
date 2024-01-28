@@ -5,6 +5,7 @@ using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,6 @@ namespace HireAndSeek.Service
 			{
 				throw new Exception("Job not found");
 			}
-
 			var appointment = new Appointment
 			{
 				JobId = createAppointmentDto.JobId,
@@ -35,6 +35,10 @@ namespace HireAndSeek.Service
 
 
 			};
+			if (DateTime.TryParseExact(createAppointmentDto.Date.ToString(),"MM/dd/yyyy hh:mm tt",CultureInfo.InvariantCulture,DateTimeStyles.None,out DateTime parsedDate))
+			{
+				appointment.Date = parsedDate;
+			}
 
 			_dbContext.Appointments.Add(appointment);
 			await _dbContext.SaveChangesAsync();

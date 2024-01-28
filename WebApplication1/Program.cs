@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using static HireAndSeek.Entities.ValidationHelpers.AppointmentHourRange;
+using System.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +38,7 @@ builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<JobService>();
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<SkillsService>();
+builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddTransient<JwtAuthenticationManager>(provider =>
 {
 	// Resolve dependencies within the factory method
@@ -51,7 +54,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+//var validHours=builder.Configuration.GetSection("SkillLimitConfig:AppointmentHours").Get<int[]>();
+ValidateHourRange.InitializeValidHours(builder.Configuration);
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
 	options.UseSqlServer(builder.Configuration.GetConnectionString("default"));
